@@ -18,16 +18,13 @@ import java.util.Properties;
  * @author Daniel Alpatov <danial.alpatov@gmail.com>
  */
 public class Main {
-
     /**
      * Точка входа в приложение
      * 
      * @param args the command line arguments
      */
-    public static void main(String[] args) throws SQLException {
-        /*
-         * TODO #01 Подключите к проекту все библиотеки, необходимые для соединения с СУБД.
-         */
+    public static void main(String[] args)throws SQLException, IOException {
+
         try (Connection connection = getConnection()) {
             ProductCode code = new ProductCode("MO", 'N', "Movies");
             code.save(connection);
@@ -37,9 +34,6 @@ public class Main {
             code.save(connection);
             printAllCodes(connection);
         }
-        /*
-         * TODO #14 Средствами отладчика проверьте корректность работы программы
-         */
     }
     /**
      * Выводит в кодсоль все коды товаров
@@ -49,9 +43,9 @@ public class Main {
      */    
     private static void printAllCodes(Connection connection) throws SQLException {
         Collection<ProductCode> codes = ProductCode.all(connection);
-        for (ProductCode code : codes) {
+         for (ProductCode code : codes) {
             System.out.println(code);
-        }
+        } 
     }
     /**
      * Возвращает URL, описывающий месторасположение базы данных
@@ -59,10 +53,8 @@ public class Main {
      * @return URL в виде объекта класса {@link String}
      */
     private static String getUrl() throws IOException {
-        /*
-         * TODO #02 Реализуйте метод getUrl
-         */
-       return getProperties().getProperty("url");
+        String url = getProperties().getProperty("url"); 
+        return url;
     }
     /**
      * Возвращает параметры соединения
@@ -71,14 +63,13 @@ public class Main {
      * password
      */
     private static Properties getProperties() throws IOException {
-        /*
-         * TODO #03 Реализуйте метод getProperties
-         */
         Properties properties = new Properties();
-        try(InputStream stream = ClassLoader.getSystemResourceAsStream("dsresources/db.properties")){
+        try(InputStream stream = ClassLoader.getSystemResourceAsStream("ru/avalon/java/j30/labs/resources/db.properties")){
             properties.load(stream);
+            return properties;
+        } catch (IOException e){
+            throw new IllegalStateException ("Database config has not be found!", e);
         }
-        return properties;
     }
     /**
      * Возвращает соединение с базой данных Sample
@@ -86,11 +77,8 @@ public class Main {
      * @return объект типа {@link Connection}
      * @throws SQLException 
      */
-    private static Connection getConnection() throws SQLException, IOException {
-        /*
-         * TODO #04 Реализуйте метод getConnection
-         */
-        return DriverManager.getConnection(getUrl());
-    }
-    
+    private static Connection getConnection() throws SQLException, IOException {       
+    Connection connetion = DriverManager.getConnection(getUrl(), getProperties());
+    return connetion;
+    }  
 }

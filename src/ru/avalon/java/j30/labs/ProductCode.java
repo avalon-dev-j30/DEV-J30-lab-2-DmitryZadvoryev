@@ -54,13 +54,9 @@ public class ProductCode {
      * содержащего все поля таблицы PRODUCT_CODE базы данных Sample.
      */
     private ProductCode(ResultSet set) throws SQLException {      
-        if(set != null){
-            while(set.next()){
                 code = set.getString("PROD_CODE");
                 discountCode = set.getString("DISCOUNT_CODE").charAt(0);
                 description = set.getString("DESCRIPTION");
-            }
-        }
     }
     /**
      * Возвращает код товара
